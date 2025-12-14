@@ -1,4 +1,6 @@
-/* Тестовое приложение для символьного драйвера simple_char */
+/* Приложение для проведения эксперимента по повтору операций чтения из и записи в символьный драйвер
+   В драйвере замеряется время между последовательными операциями чтения и записи
+   Полученные данные из 10000 экспериментов сохраняются в файле output.csv*/
 
 #include <stdio.h>
 #include <fcntl.h>
@@ -17,21 +19,21 @@ typedef int64_t s64;
 #define MAGIC_NUM 'a'
 #define CLEAR_BUFFER _IO(MAGIC_NUM, 2)    /* Очистка буфера */
 #define IS_EMPTY _IOR(MAGIC_NUM, 1, int*) /* Проверка пустоты буфера */
-#define MEASURED_TIME _IOR(MAGIC_NUM, 3, u64*) 
+#define MEASURED_TIME _IOR(MAGIC_NUM, 3, u64*) /* Прочитать время в наносекундах за крайнию пару операций чтения/записи */
 
-#define DEVICE_PATH "/dev/simple_char"
+#define DEVICE_PATH "/dev/char_driver"
 
 int main()
 {
 	int fd;
 	bool buf_empty;
 	ssize_t ret;
-        int read_int = -1;
-        int write_int = 4;
-        s64 elapsed_time_ms = -1;
+
+	int read_int = -1; // считанное число
+	int write_int = 4; // записанное число
 
 	/* Открытие устройства */
-	printf("=== Тестирование драйвера simple_char ===\n\n");
+	printf("=== Тестирование драйвера char_driver ===\n\n");
 	fd = open(DEVICE_PATH, O_RDWR);
 	if (fd < 0) {
 	  perror("Ошибка открытия устройства");
@@ -61,7 +63,7 @@ int main()
 	  close(fd);
 	  return -1;
 	}
-	printf("✓ Wrote number %d\n\n", write_int);
+	printf("✓ Число %d успешно записано\n\n", write_int);
 
 	/* Тест 3: Чтение данных из устройства */
 	printf("--- Тест 3: Чтение данных из устройства ---\n");
@@ -72,7 +74,11 @@ int main()
 	  close(fd);
 	  return -1;
 	}
-	printf("✓ Read number %d\n\n", read_int);
+	if (read_int == write_int) {
+		printf("✓ Успешно прочитано число %d\n\n", read_int);
+	} else {
+		printf("✗ Ошибка: Было прочитано %d, но должно было быть %d", read_int, write_int);
+	}
 
 	/* Тест 4: Проверка что буфер НЕ пустой после записи */
 	printf("--- Тест 4: Проверка состояния буфера после записи ---\n");
@@ -109,78 +115,65 @@ int main()
 	  printf("✗ Ошибка: буфер должен быть пустым!\n\n");
 	}
 	
-	/* Test 7: Reading time difference between read and write operations*/
-        printf("--- Test 7: Reading time difference between read and write operations ---\n");
-        int test_num = 10000;
-        u64 values[test_num];
-        int cnt = 0;
-        u64 min_elapsed = 100000;
-        u64 max_elapsed = 0;
-        for (int i = 0; i < test_num; ++i){
-          ret = write(fd, &i, sizeof(int));
+	/* Тест 7: Эксперимент. 10000 раз повторяется операция чтения/записи */
+    printf("--- Тест 7: Эксперимент. 10000 раз повторяется операция чтения/записи ---\n");
+    int test_num = 10000;
+	u64 elapsed_time_arr[test_num];
+    int successfull_experiment_cnt = 0;
+    for (int i = 0; i < test_num; ++i){
+		ret = write(fd, &i, sizeof(int));
           
-          if (ret < 0) {
-	    perror("Ошибка записи в устройство");
-	    printf("Error in write\n");
-	    close(fd);
-	    return -1;
-	  }
-
+        if (ret < 0) {
+	    	perror("Ошибка записи в устройство");
+	    	close(fd);
+	    	return -1;
+	 	}
+		
+		ret = read(fd, &read_int, sizeof(int));
+	  	
+		if (ret < 0) {
+	    	perror("Ошибка чтения из устройства");
+	    	close(fd);
+	    	return -1;
+	  	}
 	  
-	  ret = read(fd, &read_int, sizeof(int));
-	  if (ret < 0) {
-	    perror("Ошибка чтения из устройства");
-	    printf("Error in read\n");
-	    close(fd);
-	    return -1;
-	  }
-	  //printf("Readint: %d\n", read_int);
-	  if (read_int != i) {
-	    printf("Read incorrect number %d", i);
-	  } else {
-	    u64 elapsed;
-	    if(ioctl(fd, MEASURED_TIME, &elapsed) < 0) {
-              perror("Error IOCTL MEASURED_TIME");
-              printf("Error in measured time\n");
-              close(fd);
-              return -1;
+	  	if (read_int != i) {
+	   		printf("Ошибка: Прочитано %d, должно было быть %d", read_int, i);
+	  	} else {
+	   		u64 elapsed;
+	    	if(ioctl(fd, MEASURED_TIME, &elapsed) < 0) {
+				perror("Ошибка IOCTL MEASURED_TIME");
+              	close(fd);
+              	return -1;
             }
-            //printf("Experiment %d: %lu\n", cnt, elapsed);
-	    values[cnt] = elapsed;
-	    if (elapsed < min_elapsed) {
-	      min_elapsed = elapsed;
-	    }
-	    if (elapsed > max_elapsed) {
-	      max_elapsed = elapsed;
-	    }
-	    cnt++;
-	  }
-          
-        }
+	    	elapsed_time_arr[cnt] = elapsed;
+	    	cnt++;
+		}      
+    }
 
-        printf("Successfully passed %d tests\n", cnt);
-        printf("Min elapsed time: %lu\n", min_elapsed);
-	printf("Max elapsed time: %lu\n", max_elapsed);
+    printf("Успшно пройденных экспериментов: %d\n\n", cnt);
 	/* Закрытие устройства */
 	close(fd);
 	printf("=== Все тесты завершены успешно! ===\n");
 	
 	/* Open csv file */
+	printf("=== Сохранение результатов в output.csv ===\n");
+	
 	FILE *fptr;
-	fptr = fopen("output.csv", "w");
+	fptr = fopen("../output/output.csv", "w");
 	
 	if (fptr == NULL) {
-	  printf("Error opening file!");
-          return 1;
-        }
+		printf("Ошибка при открытии output.csv!");
+    	return 1;
+    }
         
-        for (int i = 0; i < test_num; ++i){
-          fprintf(fptr, "%ld\n", values[i]);
-        }
+    for (int i = 0; i < test_num; ++i){
+    	fprintf(fptr, "%ld\n", elapsed_time_arr[i]);
+    }
         
-        fclose(fptr);
+    fclose(fptr);
         
-        printf("Experiment results written to output.csv successfully\n");
+    printf("=== Результаты сохранены в output/output.csv! ===\n");
 	
 	return 0;
 }
