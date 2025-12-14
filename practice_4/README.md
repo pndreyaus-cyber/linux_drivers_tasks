@@ -126,3 +126,40 @@ sudo dmesg | grep simple_char
 - `dev_ioctl()` - обработка IOCTL команд:
   - `IS_EMPTY` - возвращает статус буфера (пустой/не пустой)
   - `CLEAR_BUFFER` - очищает буфер
+
+## Результаты
+
+<figure>
+  <img
+  src="./img/ls_driver.png"
+  alt="Driver insertion">
+  <figcaption>Вставка скомпилированного драйвера в ядро</figcaption>
+</figure>
+
+<figure>
+  <img
+  src="./img/dmesg_starting_driver.png"
+  alt="Dmesg output after driver insertion">
+  <figcaption>Вывод драйвера при запуске</figcaption>
+</figure>
+
+<figure>
+  <img
+  src="./img/user_app_tests.png"
+  alt="User app testing">
+  <figcaption>Вывод пользовательского приложения</figcaption>
+</figure>
+
+<figure>
+  <img
+  src="./img/dmesg_after_running_app.png"
+  alt="Dmesg output after running the app">
+  <figcaption>Вывод драйвера после отработки пользовательского приложения</figcaption>
+</figure>
+
+<figure>
+  <img
+  src="./img/deleting_driver.png"
+  alt="Removing driver">
+  <figcaption>Удаление драйвера из ядра</figcaption>
+</figure>
