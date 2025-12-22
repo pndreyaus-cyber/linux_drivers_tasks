@@ -146,12 +146,12 @@ int main()
               	close(fd);
               	return -1;
             }
-	    	elapsed_time_arr[cnt] = elapsed;
-	    	cnt++;
+	    	elapsed_time_arr[successfull_experiment_cnt] = elapsed;
+	    	successfull_experiment_cnt++;
 		}      
     }
 
-    printf("Успшно пройденных экспериментов: %d\n\n", cnt);
+    printf("Успшно пройденных экспериментов: %d\n\n", successfull_experiment_cnt);
 	/* Закрытие устройства */
 	close(fd);
 	printf("=== Все тесты завершены успешно! ===\n");
