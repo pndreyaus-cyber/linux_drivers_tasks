@@ -65,9 +65,9 @@ static struct class *mynet_class; /* Sysfs-класс для автоматич�
 * net_open() - аналог ndo_open() ВАШЕГО ИСХОДНОГО СЕТОВОГО ДРАЙВЕРА
 * Вызывается при включении интерфейса
 */
-static int net_open() {
+static int net_open(void) {
 	pr_info("MYNET: net_open() вызван - интерфейс UP\n");
-	mynet_data->up = 1;
+	mynet_data.up = 1;
 	return 0;
 }
 
@@ -75,9 +75,9 @@ static int net_open() {
 * net_stop() - аналог ndo_stop() ВАШЕГО ИСХОДНОГО СЕТОВОГО ДРАЙВЕРА
 * Вызывается при выключении интерфейса. Останавливает оборудование/освобождает ресурсы.
 */
-static int net_stop() {
+static int net_stop(void) {
 	pr_info("MYNET: net_stop() вызван - интерфейс DOWN\n");
-	mynet_data->up = 0;
+	mynet_data.up = 0;
 	return 0;
 }
 
@@ -89,17 +89,17 @@ static int net_stop() {
 static int start_xmit(const char *skb_data, size_t len) {
 
 	if (len >= MAX_PKTLEN) {
-		pr_warn("MYNET: Пакет слишком большой: %zu > MTU %d\n", len, mynet_data->mtu);
+		pr_warn("MYNET: Пакет слишком большой: %zu > MTU %d\n", len, mynet_data.mtu);
 		return 0;
 	}
 
 	/* Симуляция копирования skb->data - в реальном драйвере */
-	if (copy_from_user(mynet_data->last_tx, skb_data, len))
+	if (copy_from_user(mynet_data.last_tx, skb_data, len))
 		return 0;
 
-	mynet_data->last_tx[len] = 0; /* Завершающий нуль для печати */
-	mynet_data->tx_packets++; /* Обновление статистики */
-	pr_info("MYNET: start_xmit() %zu байт: %.20s...\n", len, mynet_data->last_tx);
+	mynet_data.last_tx[len] = 0; /* Завершающий нуль для печати */
+	mynet_data.tx_packets++; /* Обновление статистики */
+	pr_info("MYNET: start_xmit() %zu байт: %.20s...\n", len, mynet_data.last_tx);
 
 	return 0;
 }
@@ -110,7 +110,7 @@ static int start_xmit(const char *skb_data, size_t len) {
 */
 static int mynet_open(struct inode *inode, struct file *file) {
 	/* Подсчет ссылок: вызываем net_open() только если еще не включен */
-	if (!mynet_data->up)
+	if (!mynet_data.up)
 		net_open();
 
 	pr_info("MYNET: /dev/%s открыт\n", DEVICE_NAME);
@@ -124,7 +124,7 @@ static int mynet_open(struct inode *inode, struct file *file) {
 static int mynet_release(struct inode *inode, struct file *file) {
 
 	/* Подсчет ссылок: вызываем net_stop() только если это последнее закрытие */
-	if (mynet_data->up)
+	if (mynet_data.up)
 		net_stop();
 
 	pr_info("MYNET: /dev/%s закрыт\n", DEVICE_NAME);
@@ -139,7 +139,7 @@ static int mynet_release(struct inode *inode, struct file *file) {
 static ssize_t mynet_write(struct file *file, const char __user *buf,
 	size_t count, loff_t *offset) {
 
-	if (!mynet_data->up) {
+	if (!mynet_data.up) {
 		pr_warn("MYNET: Интерфейс выключен - данные нельзя передавать\n");
 		return -ENETDOWN;
 	}
@@ -157,15 +157,15 @@ static ssize_t mynet_write(struct file *file, const char __user *buf,
 */
 static ssize_t mynet_read(struct file *file, char __user *buf,
 	size_t count, loff_t *offset) {
-	int len = strlen(mynet_data->last_tx);
+	int len = strlen(mynet_data.last_tx);
 
 	if (len == 0) return 0; /* Нечего читать */
 
 	/* Симуляция RX-пакета - копируем последний TX в пользовательское пространство */
-	if (copy_to_user(buf, mynet_data->last_tx, len))
+	if (copy_to_user(buf, mynet_data.last_tx, len))
 		return -EFAULT;
 
-	priv->rx_packets++; /* Обновление RX-статистики */
+	mynet_data.rx_packets++; /* Обновление RX-статистики */
 	return len;
 }
 
@@ -186,10 +186,10 @@ static long mynet_ioctl(struct file *file, unsigned int cmd, unsigned long arg) 
 		return net_stop(); /* ndo_stop() */
 	case MYNET_IOCTL_STATS:
 		/* Копируем статистику в пользовательское пространство */
-		stats.up = mynet_data->up;
-		stats.mtu = mynet_data->mtu;
-		stats.tx_packets = mynet_data->tx_packets;
-		stats.rx_packets = mynet_data->rx_packets;
+		stats.up = mynet_data.up;
+		stats.mtu = mynet_data.mtu;
+		stats.tx_packets = mynet_data.tx_packets;
+		stats.rx_packets = mynet_data.rx_packets;
 
 		if (copy_to_user((struct mynet_stats __user *)arg, &stats, sizeof(stats)))
 			return -EFAULT;
@@ -220,7 +220,7 @@ static int __init mynet_init(void) {
 	/* 1. Получаем уникальные номера устройств (major:minor) */
 	ret = alloc_chrdev_region(&dev_num, 0, 1, DEVICE_NAME);
 	if (ret < 0) {
-		printk(KERN_ERROR "MYNET: Ошибка выделения области chrdev\n");
+		printk(KERN_ERR "MYNET: Ошибка выделения области chrdev\n");
 		return ret;
 	}
 	printk(KERN_INFO "MYNET: зарегистирован драйвер <major %d, minor %d>\n", MAJOR(dev_num), MINOR(dev_num));
@@ -241,7 +241,7 @@ static int __init mynet_init(void) {
 	/* 4. Создание класса устройства */
 	mynet_class = class_create(DEVICE_NAME);
 	if (IS_ERR(mynet_class)) {
-		cdev_del(&mynet_class);
+		cdev_del(&mynet_data.cdev);
 		unregister_chrdev_region(dev_num, 1);
 		printk(KERN_ALERT "MYNET: не удалось создать класс\n");
 		return PTR_ERR(mynet_class);
@@ -251,7 +251,7 @@ static int __init mynet_init(void) {
 	mynet_device = device_create(mynet_class, NULL, dev_num, NULL, DEVICE_NAME);
 	if (IS_ERR(mynet_device)) {
 		class_destroy(mynet_class);
-		cdev_del(&mynet_class);
+		cdev_del(&mynet_data.cdev);
 		unregister_chrdev_region(dev_num, 1);
 		printk(KERN_ALERT "MYNET: не удалось создать устройство\n");
 		return PTR_ERR(mynet_device);
