@@ -1,22 +1,22 @@
 /*
- * mynetchar.c - Minimal Network Driver converted to Character Device
- *
- * CONCEPT: This driver takes a typical network driver's core logic (open, stop, start_xmit)
- * and re-exposes it through a CHARACTER DEVICE interface (/dev/mynetchar) instead of
- * registering as a net_device with the networking stack.
- *
- * NETWORK FUNCTIONS MAPPED TO CHAR DEVICE:
- *   - net_device->ndo_open()    → ioctl(MYNET_IOCTL_UP) or first .open()
- *   - net_device->ndo_stop()    → ioctl(MYNET_IOCTL_DOWN) or last .release()
- *   - net_device->ndo_start_xmit() → .write() system call
- *   
- * NO NETWORKING STACK INTEGRATION: This does NOT register a net_device, so it won't
- * show in 'ip link' or 'ifconfig'. It's purely a char device that REUSES your network
- * driver's internal logic for demonstration/learning purposes.
- *
- * USAGE: Userspace opens /dev/mynetchar, uses ioctl to control UP/DOWN, writes packets
- *        to trigger start_xmit(), reads back simulated RX data.
- */
+* mynetchar.c - Минимальный сетевой драйвер, преобразованный в символьное устройство
+
+* КОНЦЕПЦИЯ: Этот драйвер берет основную логику типичного сетевого драйвера (open, stop, start_xmit)
+* и повторно предоставляет ее через интерфейс СИМВОЛЬНОГО УСТРОЙСТВА (/dev/mynetchar) вместо
+* регистрации как net_device в сетевом стеке.
+
+* СЕТЕВЫЕ ФУНКЦИИ, ОТОБРАЖЕННЫЕ НА СИМВОЛЬНОЕ УСТРОЙСТВО:
+* - net_device->ndo_open() → ioctl(MYNET_IOCTL_UP) или первое .open()
+* - net_device->ndo_stop() → ioctl(MYNET_IOCTL_DOWN) или последнее .release()
+* - net_device->ndo_start_xmit() → системный вызов .write()
+
+* БЕЗ ИНТЕГРАЦИИ С СЕТЕВЫМ СТЕКОМ: Этот драйвер НЕ регистрирует net_device, поэтому он не
+* отображается в 'ip link' или 'ifconfig'. Это чисто символьное устройство, которое ПЕРЕИСПОЛЬЗУЕТ
+* внутреннюю логику вашего сетевого драйвера в целях демонстрации/обучения.
+
+* ИСПОЛЬЗОВАНИЕ: Пользовательское пространство открывает /dev/mynetchar, использует ioctl для управления UP/DOWN,
+* записывает пакеты для вызова start_xmit(), читает симулированные RX-данные.
+*/
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -26,258 +26,254 @@
 #include <linux/uaccess.h>
 #include <linux/ioctl.h>
 
-#define MYNET_MAGIC 'N'
-#define MYNET_IOCTL_UP     _IO(MYNET_MAGIC, 1)   /* Bring interface UP (like ifconfig up) */
-#define MYNET_IOCTL_DOWN   _IO(MYNET_MAGIC, 2)   /* Bring interface DOWN (like ifconfig down) */
-#define MYNET_IOCTL_STATS  _IOR(MYNET_MAGIC, 3, struct mynet_stats)  /* Get stats */
+#define MYNET_MAGIC 'A'
+
+#define MYNET_IOCTL_UP _IO(MYNET_MAGIC, 1) /* Включить интерфейс (как ifconfig up) */
+#define MYNET_IOCTL_DOWN _IO(MYNET_MAGIC, 2) /* Выключить интерфейс (как ifconfig down) */
+#define MYNET_IOCTL_STATS _IOR(MYNET_MAGIC, 3, struct mynet_stats) /* Получить статистику */
 
 #define DEVICE_NAME "mynetchar"
-#define MAX_PKTLEN  1500
+#define MAX_PKTLEN 1500
 
-/* Private data structure - similar to net_device->priv in real network drivers */
+/* Структура приватных данных - аналогична net_device->priv в реальных сетевых драйверах */
 struct mynet_priv {
-    struct cdev cdev;                    /* Character device registration */
-    int up;                              /* Interface state (UP/DOWN) */
-    int mtu;                             /* Maximum packet size */
-    unsigned long tx_packets;            /* TX packet counter */
-    unsigned long rx_packets;            /* RX packet counter (simulated) */
-    char last_tx[MAX_PKTLEN];            /* Store last transmitted packet for read() */
+	struct cdev cdev; /* Регистрация символьного устройства */
+	int up; /* Состояние интерфейса (UP/DOWN) */
+	int mtu; /* Максимальный размер пакета */
+	unsigned long tx_packets; /* Счетчик TX-пакетов */
+	unsigned long rx_packets; /* Счетчик RX-пакетов (симулированный) */
+	char last_tx[MAX_PKTLEN]; /* Хранение последнего переданного пакета для read() */
 };
 
 static struct mynet_priv mynet_data = {
-  .mtu = 1500,
+	.mtu = 1500,
 };
 
-/* Stats structure - passed to userspace via ioctl */
+/* Структура статистики - передается в пользовательское пространство через ioctl */
 struct mynet_stats {
-    int up;
-    int mtu;
-    unsigned long tx_packets;
-    unsigned long rx_packets;
+	int up;
+	int mtu;
+	unsigned long tx_packets;
+	unsigned long rx_packets;
 };
 
-static dev_t dev_num;                    /* Major:minor device number */
-static struct class *mynet_class;        /* Sysfs class for auto /dev node */
+static dev_t dev_num; /* Номер устройства major:minor */
+static struct device *mynet_device;
+static struct class *mynet_class; /* Sysfs-класс для автоматического узла /dev */
 
 /*
- * net_open() - YOUR ORIGINAL NETWORK DRIVER'S ndo_open() equivalent
- * Called when interface goes UP. Initializes hardware/registers interrupts/etc.
- */
-static int net_open(void *priv) {
-    struct mynet_priv *p = priv;
-    pr_info("MYNET: net_open() called - interface UP\n");
-    p->up = 1;
-    return 0;
+* net_open() - аналог ndo_open() ВАШЕГО ИСХОДНОГО СЕТОВОГО ДРАЙВЕРА
+* Вызывается при включении интерфейса
+*/
+static int net_open() {
+	pr_info("MYNET: net_open() вызван - интерфейс UP\n");
+	mynet_data->up = 1;
+	return 0;
 }
 
 /*
- * net_stop() - YOUR ORIGINAL NETWORK DRIVER'S ndo_stop() equivalent  
- * Called when interface goes DOWN. Stops hardware/releases resources.
- */
-static int net_stop(void *priv) {
-    struct mynet_priv *p = priv;
-    pr_info("MYNET: net_stop() called - interface DOWN\n");
-    p->up = 0;
-    return 0;
+* net_stop() - аналог ndo_stop() ВАШЕГО ИСХОДНОГО СЕТОВОГО ДРАЙВЕРА
+* Вызывается при выключении интерфейса. Останавливает оборудование/освобождает ресурсы.
+*/
+static int net_stop() {
+	pr_info("MYNET: net_stop() вызван - интерфейс DOWN\n");
+	mynet_data->up = 0;
+	return 0;
 }
 
 /*
- * start_xmit() - YOUR ORIGINAL NETWORK DRIVER'S ndo_start_xmit() equivalent
- * Called by kernel networking stack (or here by .write()) to transmit a packet.
- * In real driver: DMA to hardware. Here: just log and store.
- */
-static int start_xmit(const char *skb_data, size_t len, void *priv) {
-    struct mynet_priv *p = priv;
-    
-    if (len >= MAX_PKTLEN) {
-        pr_warn("MYNET: Packet too large: %zu > MTU %d\n", len, p->mtu);
-        return 0;  /* Pretend success */
-    }
-    
-    /* Simulate skb->data copy - in real driver this goes to TX ring/DMA */
-    if (copy_from_user(p->last_tx, skb_data, len))
-        return 0;
-    p->last_tx[len] = 0;  /* Null terminate for printing */
-    
-    p->tx_packets++;      /* Update statistics */
-    pr_info("MYNET: start_xmit() %zu bytes: %.20s...\n", len, p->last_tx);
-    return 0;  /* Tell networking stack we're done */
+* start_xmit() - аналог ndo_start_xmit() ВАШЕГО ИСХОДНОГО СЕТОВОГО ДРАЙВЕРА
+* Вызывается сетевым стеком ядра (или здесь через .write()) для передачи пакета.
+* В реальном драйвере: DMA на оборудование. Здесь: просто логирование и хранение.
+*/
+static int start_xmit(const char *skb_data, size_t len) {
+
+	if (len >= MAX_PKTLEN) {
+		pr_warn("MYNET: Пакет слишком большой: %zu > MTU %d\n", len, mynet_data->mtu);
+		return 0;
+	}
+
+	/* Симуляция копирования skb->data - в реальном драйвере */
+	if (copy_from_user(mynet_data->last_tx, skb_data, len))
+		return 0;
+
+	mynet_data->last_tx[len] = 0; /* Завершающий нуль для печати */
+	mynet_data->tx_packets++; /* Обновление статистики */
+	pr_info("MYNET: start_xmit() %zu байт: %.20s...\n", len, mynet_data->last_tx);
+
+	return 0;
 }
 
 /*
- * mynet_open() - Character device .open() callback
- * Maps to network driver's reference counting. Calls net_open() on FIRST open.
- */
+* mynet_open() - callback .open() символьного устройства
+* Соответствует подсчету ссылок сетевого драйвера. Вызывает net_open() при ПЕРВОМ открытии.
+*/
 static int mynet_open(struct inode *inode, struct file *file) {
-    struct mynet_priv *priv = container_of(inode->i_cdev, struct mynet_priv, cdev);
-    file->private_data = priv;  /* Pass priv to other fops */
-    
-    /* Reference counting: only call net_open() if not already up */
-    if (!priv->up)
-        net_open(priv);
-    
-    pr_info("MYNET: /dev/%s opened (users: %d)\n", DEVICE_NAME, 1);
-    return 0;
+	/* Подсчет ссылок: вызываем net_open() только если еще не включен */
+	if (!mynet_data->up)
+		net_open();
+
+	pr_info("MYNET: /dev/%s открыт\n", DEVICE_NAME);
+	return 0;
 }
 
 /*
- * mynet_release() - Character device .release() callback  
- * Maps to network driver's reference counting. Calls net_stop() on LAST close.
- */
+* mynet_release() - callback .release() символьного устройства
+* Соответствует подсчету ссылок сетевого драйвера. Вызывает net_stop() при ПОСЛЕДНЕМ закрытии.
+*/
 static int mynet_release(struct inode *inode, struct file *file) {
-    struct mynet_priv *priv = file->private_data;
-    
-    /* Reference counting: only call net_stop() if this is last close */
-    if (priv->up)
-        net_stop(priv);
-    
-    pr_info("MYNET: /dev/%s closed\n", DEVICE_NAME);
-    return 0;
+
+	/* Подсчет ссылок: вызываем net_stop() только если это последнее закрытие */
+	if (mynet_data->up)
+		net_stop();
+
+	pr_info("MYNET: /dev/%s закрыт\n", DEVICE_NAME);
+	return 0;
 }
 
 /*
- * mynet_write() - Character device .write() callback
- * Userspace: echo "packet data" > /dev/mynetchar
- * This directly calls YOUR start_xmit() logic!
- */
+* mynet_write() - callback .write() символьного устройства
+* Пользовательское пространство: echo "данные пакета" > /dev/mynetchar
+* Это напрямую вызывает логику start_xmit()!
+*/
 static ssize_t mynet_write(struct file *file, const char __user *buf,
-                          size_t count, loff_t *ppos) {
-    struct mynet_priv *priv = file->private_data;
-    
-    if (!priv->up) {
-        pr_warn("MYNET: Interface down - can't transmit\n");
-        return -ENETDOWN;
-    }
-    
-    /* REUSE YOUR ORIGINAL start_xmit() - just like kernel networking stack would! */
-    start_xmit(buf, count, priv);
-    return count;  /* Tell userspace we consumed all bytes */
+	size_t count, loff_t *offset) {
+
+	if (!mynet_data->up) {
+		pr_warn("MYNET: Интерфейс выключен - данные нельзя передавать\n");
+		return -ENETDOWN;
+	}
+
+	/* ПЕРЕИСПОЛЬЗУЕМ start_xmit() - точно так же, как сетевой стек ядра */
+	start_xmit(buf, count);
+
+	return count; /* Сообщаем пользовательскому пространству, что все байты обработаны */
 }
 
 /*
- * mynet_read() - Character device .read() callback (RX simulation)
- * Userspace: cat /dev/mynetchar
- * For demo: echoes back last TX packet (loopback simulation).
- */
+* mynet_read() - callback .read() символьного устройства (симуляция RX)
+* Пользовательское пространство: cat /dev/mynetchar
+* Для демо: возвращает последний TX-пакет (симуляция loopback).
+*/
 static ssize_t mynet_read(struct file *file, char __user *buf,
-                         size_t count, loff_t *ppos) {
-    struct mynet_priv *priv = file->private_data;
-    int len = strlen(priv->last_tx);
-    
-    if (len == 0) return 0;  /* Nothing to read */
-    
-    /* Simulate RX packet - copy last TX to userspace */
-    if (copy_to_user(buf, priv->last_tx, len))
-        return -EFAULT;
-    
-    priv->rx_packets++;  /* Update RX stats */
-    return len;
+	size_t count, loff_t *offset) {
+	int len = strlen(mynet_data->last_tx);
+
+	if (len == 0) return 0; /* Нечего читать */
+
+	/* Симуляция RX-пакета - копируем последний TX в пользовательское пространство */
+	if (copy_to_user(buf, mynet_data->last_tx, len))
+		return -EFAULT;
+
+	priv->rx_packets++; /* Обновление RX-статистики */
+	return len;
 }
 
 /*
- * mynet_ioctl() - Character device .unlocked_ioctl() callback
- * Userspace control commands: UP/DOWN/GET_STATS (like ifconfig/ip link)
- */
+* mynet_ioctl() - callback .unlocked_ioctl() символьного устройства
+* Команды управления из пользовательского пространства: UP/DOWN/ПОЛУЧИТЬ_СТАТИСТИКУ (как ifconfig/ip link)
+*/
 static long mynet_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    struct mynet_priv *priv = file->private_data;
-    struct mynet_stats stats;
-    
-    switch (cmd) {
-    case MYNET_IOCTL_UP:
-        pr_info("MYNET: ioctl UP\n");
-        return net_open(priv);  /* Your original ndo_open() */
-        
-    case MYNET_IOCTL_DOWN:
-        pr_info("MYNET: ioctl DOWN\n");
-        return net_stop(priv);  /* Your original ndo_stop() */
-        
-    case MYNET_IOCTL_STATS:
-        /* Copy stats to userspace */
-        stats.up = priv->up;
-        stats.mtu = priv->mtu;
-        stats.tx_packets = priv->tx_packets;
-        stats.rx_packets = priv->rx_packets;
-        
-        if (copy_to_user((struct mynet_stats __user *)arg, &stats, sizeof(stats)))
-            return -EFAULT;
-        return 0;
-        
-    default:
-        return -ENOTTY;  /* Unknown command */
-    }
+	//struct mynet_priv *priv = file->private_data;
+	struct mynet_stats stats;
+
+	switch (cmd) {
+	case MYNET_IOCTL_UP:
+		pr_info("MYNET: ioctl UP\n");
+		return net_open(); /* ndo_open() */
+	case MYNET_IOCTL_DOWN:
+		pr_info("MYNET: ioctl DOWN\n");
+		return net_stop(); /* ndo_stop() */
+	case MYNET_IOCTL_STATS:
+		/* Копируем статистику в пользовательское пространство */
+		stats.up = mynet_data->up;
+		stats.mtu = mynet_data->mtu;
+		stats.tx_packets = mynet_data->tx_packets;
+		stats.rx_packets = mynet_data->rx_packets;
+
+		if (copy_to_user((struct mynet_stats __user *)arg, &stats, sizeof(stats)))
+			return -EFAULT;
+		return 0;
+	default:
+		return -ENOTTY; /* Неизвестная команда */
+	}
+	return 0;
 }
 
-/* Character device file operations table */
+/* Таблица операций с файлом символьного устройства */
 static const struct file_operations mynet_fops = {
-    .owner = THIS_MODULE,
-    .open = mynet_open,           /* Maps to net_open() */
-    .release = mynet_release,     /* Maps to net_stop() */
-    .read = mynet_read,           /* Simulate RX */
-    .write = mynet_write,         /* Calls start_xmit() */
-    .unlocked_ioctl = mynet_ioctl, /* UP/DOWN/Stats control */
+	.owner = THIS_MODULE,
+	.open = mynet_open, /* Соответствует net_open() */
+	.release = mynet_release, /* Соответствует net_stop() */
+	.read = mynet_read, /* Симуляция RX */
+	.write = mynet_write, /* Вызов start_xmit() */
+	.unlocked_ioctl = mynet_ioctl, /* Управление UP/DOWN/статистикой */
 };
 
 /*
- * Module init - Register character device /dev/mynetchar
- * Creates: /dev/mynetchar (major=XXX minor=0)
- */
+* Инициализация модуля - Регистрация символьного устройства /dev/mynetchar
+* Создает: /dev/mynetchar (major=XXX minor=0)
+*/
 static int __init mynet_init(void) {
-    int ret;
-    
-    /* 1. Get unique device numbers (like major:minor) */
-    ret = alloc_chrdev_region(&dev_num, 0, 1, DEVICE_NAME);
-    if (ret < 0) {
-        pr_err("MYNET: Failed to alloc chrdev region\n");
-        return ret;
-    }
-    
-    /* 3. Setup character device */
-    cdev_init(&mynet_data.cdev, &mynet_fops);
-    mynet_data.cdev.owner = THIS_MODULE;
-    mynet_data.mtu = 1500;  /* Default MTU */
-    
-    /* 4. Register cdev */
-    ret = cdev_add(&mynet_data.cdev, dev_num, 1);
-    //if (ret < 0)
-   //     goto err_data;
-    
-    /* 5. Create sysfs class + device node (/dev/mynetchar) */
-    mynet_class = class_create(DEVICE_NAME);
-    if (IS_ERR(mynet_class)) {
-        ret = PTR_ERR(mynet_class);
-        goto err_cdev;
-    }
-    
-    if (IS_ERR(device_create(mynet_class, NULL, dev_num, NULL, DEVICE_NAME))) {
-        ret = -ENODEV;
-        goto err_class;
-    }
-    
-    pr_info("MYNET: /dev/%s loaded (major=%d)\n", DEVICE_NAME, MAJOR(dev_num));
-    return 0;
+	int ret;
 
-err_class:
-    class_destroy(mynet_class);
-err_cdev:
-    cdev_del(&mynet_data.cdev);
-err_chrdev:
-    unregister_chrdev_region(dev_num, 1);
-    return ret;
+	/* 1. Получаем уникальные номера устройств (major:minor) */
+	ret = alloc_chrdev_region(&dev_num, 0, 1, DEVICE_NAME);
+	if (ret < 0) {
+		printk(KERN_ERROR "MYNET: Ошибка выделения области chrdev\n");
+		return ret;
+	}
+	printk(KERN_INFO "MYNET: зарегистирован драйвер <major %d, minor %d>\n", MAJOR(dev_num), MINOR(dev_num));
+	
+	/* 2. Инициализация и добавлние символьного устройства */
+	cdev_init(&mynet_data.cdev, &mynet_fops);
+	mynet_data.cdev.owner = THIS_MODULE;
+	mynet_data.mtu = 1500; /* MTU по умолчанию */
+
+	/* 3. Регистрация cdev */
+	ret = cdev_add(&mynet_data.cdev, dev_num, 1);
+	if (ret < 0) {
+		unregister_chrdev_region(dev_num, 1);
+		printk(KERN_ALERT "MYNET: не удалось добавить устройство\n");
+		return ret;
+	}
+
+	/* 4. Создание класса устройства */
+	mynet_class = class_create(DEVICE_NAME);
+	if (IS_ERR(mynet_class)) {
+		cdev_del(&mynet_class);
+		unregister_chrdev_region(dev_num, 1);
+		printk(KERN_ALERT "MYNET: не удалось создать класс\n");
+		return PTR_ERR(mynet_class);
+	}
+
+	/* 5. Создание файла устройства в /dev */
+	mynet_device = device_create(mynet_class, NULL, dev_num, NULL, DEVICE_NAME);
+	if (IS_ERR(mynet_device)) {
+		class_destroy(mynet_class);
+		cdev_del(&mynet_class);
+		unregister_chrdev_region(dev_num, 1);
+		printk(KERN_ALERT "MYNET: не удалось создать устройство\n");
+		return PTR_ERR(mynet_device);
+	}
+
+	printk(KERN_ALERT "MYNET: устройство успешно создано\n");
+	return 0;
 }
 
-/* Module exit - Cleanup everything */
+/* Выход модуля - Очистка всего */
 static void __exit mynet_exit(void) {
-    device_destroy(mynet_class, dev_num);
-    class_destroy(mynet_class);
-    cdev_del(&mynet_data.cdev);
-    unregister_chrdev_region(dev_num, 1);
-    pr_info("MYNET: Module unloaded\n");
+	/* Удаление устройства и освобождение ресурсов в обратном порядке*/
+	device_destroy(mynet_class, dev_num);
+	class_destroy(mynet_class);
+	cdev_del(&mynet_data.cdev);
+	unregister_chrdev_region(dev_num, 1);
+	pr_info("MYNET: Устройство удалено, ресурсы освобождены\n");
 }
 
 module_init(mynet_init);
 module_exit(mynet_exit);
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Your Name");
-MODULE_DESCRIPTION("Network driver logic as character device");
-
+MODULE_AUTHOR("Andrei Petrov");
+MODULE_DESCRIPTION("Логика сетевого драйвера как символьного драйвера");
