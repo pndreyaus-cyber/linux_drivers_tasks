@@ -5,39 +5,11 @@
 
 static void vnet_setup(struct net_device *dev);
 static int vnet_napi_poll(struct napi_struct *napi, int budget);
+static int vnet_open(struct net_device *dev);
+static int vnet_release(struct net_device *dev);
+static int vnet_xmit(struct sk_buff *skb, struct net_device *dev);
+static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd);
 
-/* Инициализация устройства */
-static int vnet_open(struct net_device *dev)
-{
-    struct vnet_priv *priv = netdev_priv(dev);
-    napi_enable(&priv->napi);
-    //start tx queue
-    netif_start_queue(dev);
-    
-    pr_info("VNET: Device opened\n");
-    return 0;
-}
-
-static int vnet_release(struct net_device *dev)
-{
-    // stop tx queue
-    netif_stop_queue(dev);
-    struct vnet_priv *priv = netdev_priv(dev);
-    napi_disable(&priv->napi);
-    skb_queue_purge(&priv->rx_queue);
-    pr_info("VNET: Device released\n");
-    return 0;
-}
-
-static int vnet_xmit(struct sk_buff *skb, struct net_device *dev)
-{
-  return 0;
-}
-
-static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
-{
-  return 0;
-}
 
 static const struct net_device_ops vnet_netdev_ops = {
   .ndo_open = vnet_open,
@@ -103,10 +75,43 @@ static void vnet_setup(struct net_device *dev) {
     // set device flags: Broadcast enabled, Multicast enabled, ARP enabled
     dev->flags |= IFF_BROADCAST | IFF_MULTICAST;
 
-    netif_napi_add(dev, &priv->napi, vnet_napi_poll, 64);
+    netif_napi_add(dev, &priv->napi, vnet_napi_poll);
 }
 
 // napi poll function
 static int vnet_napi_poll(struct napi_struct *napi, int budget) {
     return 0;
+}
+
+/* Инициализация устройства */
+static int vnet_open(struct net_device *dev)
+{
+    struct vnet_priv *priv = netdev_priv(dev);
+    napi_enable(&priv->napi);
+    //start tx queue
+    netif_start_queue(dev);
+    
+    pr_info("VNET: Device opened\n");
+    return 0;
+}
+
+static int vnet_release(struct net_device *dev)
+{
+    // stop tx queue
+    netif_stop_queue(dev);
+    struct vnet_priv *priv = netdev_priv(dev);
+    napi_disable(&priv->napi);
+    skb_queue_purge(&priv->rx_queue);
+    pr_info("VNET: Device released\n");
+    return 0;
+}
+
+static int vnet_xmit(struct sk_buff *skb, struct net_device *dev)
+{
+  return 0;
+}
+
+static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
+{
+  return 0;
 }
