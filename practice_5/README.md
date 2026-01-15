@@ -41,7 +41,7 @@ struct net_device
 2) sudo insmod vnet_driver.ko
 3) ip link show
 
-## Step 2. 
+## Step 2
 ### What should be initialized in vnet_setup()?
 This function describes, what this device is.
 This function is static and for every device...
@@ -62,3 +62,5 @@ Thus, the following things should not be initialize in vnet_setup():
 - Supports multicast
 - Does not need ARP suppression
 - ARP enabled
+
+## Step 3. Implement device lifecycle management

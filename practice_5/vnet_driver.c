@@ -8,12 +8,19 @@ static void vnet_setup(struct net_device *dev);
 /* Инициализация устройства */
 static int vnet_open(struct net_device *dev)
 {
-  return 0;
+    napi_enable(&dev->napi);
+    pr_info("VNET: Device opened\n");
+    return 0;
 }
 
 static int vnet_release(struct net_device *dev)
 {
-  return 0;
+    napi_disable(&dev->napi);
+    // clear rx_queue
+    struct vnet_priv *priv = netdev_priv(dev);
+    skb_queue_purge(&priv->rx_queue);
+    pr_info("VNET: Device released\n");
+    return 0;
 }
 
 static int vnet_xmit(struct sk_buff *skb, struct net_device *dev)
@@ -37,6 +44,7 @@ struct vnet_priv {
   spinlock_t lock;
   struct sk_buff_head rx_queue;
   int lost_rx_packets;
+  napi_struct napi;
 };
 
 struct net_device *dev = NULL;
@@ -85,8 +93,9 @@ static void vnet_setup(struct net_device *dev) {
     // generate random MAC address using helper function
     eth_hw_addr_random(dev);
     // pr_info this MAC address
-    pr_info("VNET: MAC address: %pM\n", dev->dev_addr
+    pr_info(KERN_INFO "VNET: MAC address: %pM\n", dev->dev_addr);
     // set device flags: Broadcast enabled, Multicast enabled, ARP enabled
     dev->flags |= IFF_BROADCAST | IFF_MULTICAST | IFF_ARP;
-    
+
+    netif_napi_add(dev, &priv->napi, NULL, 64);
 }
