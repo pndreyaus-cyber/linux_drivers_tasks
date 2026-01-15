@@ -93,10 +93,16 @@ static int vnet_napi_poll(struct napi_struct *napi, int budget) {
         spin_unlock(&priv->lock); // Why we need to unlock here? Because we will process the packet and we do not need to hold the lock during processing.
         pr_info("VNET: Processing received packet %d of length %u\n", packets_processed, skb->len);
 
-        // send skb to kernel. Check protocol in the skb and pr_info it
-        pr_info("VNET: Packet protocol: 0x%04x\n", ntohs(skb->protocol));
-        skb->protocol = eth_type_trans(skb, netdev); // Set protocol field. Why do you change it? Because eth_type_trans sets the protocol field based on the Ethernet header.
-        skb->ip_summed = CHECKSUM_UNNECESSARY; // No checksum offloading    
+        // Prepare skb for reception
+        skb->dev = netdev; // Set device pointer
+        skb->protocol = eth_type_trans(skb, netdev); // Set protocol field based on Ethernet header
+        skb->ip_summed = CHECKSUM_UNNECESSARY; // No checksum offloading
+        pr_info("VNET: Packet protocol after eth_type_trans: 0x%04x\n", ntohs(skb->protocol));
+        
+        // Update device statistics
+        netdev->stats.rx_packets++;
+        netdev->stats.rx_bytes += skb->len;
+        
         netif_receive_skb(skb); // Pass skb to the network stack
 
         //kfree_skb(skb); Removed, because netif_receive_skb takes ownership of skb and will free it later.
@@ -159,6 +165,10 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
     struct vnet_priv *priv = netdev_priv(dev);
 
     pr_info("VNET: vnet_xmit");
+
+    // Update TX statistics
+    netdev->stats.tx_packets++;
+    netdev->stats.tx_bytes += skb->len;
 
     // Lock rx queue. Why? Because we will access shared resource rx_queue. But rx_queue contains received packets, why do we need to lock it when we are transmitting? Because in this virtual driver, we simulate packet transmission by enqueueing the skb into the RX queue for processing by NAPI.
     spin_lock(&priv->lock);
