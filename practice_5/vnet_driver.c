@@ -85,8 +85,8 @@ static void vnet_setup(struct net_device *dev) {
     // generate random MAC address using helper function
     eth_hw_addr_random(dev);
     // pr_info this MAC address
-    pr_info("VNET: MAC address: %pM\n", dev->dev_addr
+    pr_info("VNET: MAC address: %pM\n", dev->dev_addr);
     // set device flags: Broadcast enabled, Multicast enabled, ARP enabled
-    dev->flags |= IFF_BROADCAST | IFF_MULTICAST | IFF_ARP;
+    dev->flags |= IFF_BROADCAST | IFF_MULTICAST ;
     
 }
