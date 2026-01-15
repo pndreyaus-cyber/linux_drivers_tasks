@@ -3,14 +3,28 @@
 #include <linux/netdevice.h>
 #include <linux/etherdevice.h>
 
+static void vnet_setup(struct net_device *dev);
+
 /* Инициализация устройства */
-static int vnet_open(struct net_device *dev){}
+static int vnet_open(struct net_device *dev)
+{
+  return 0;
+}
 
-static int vnet_release(struct net_device *dev){}
+static int vnet_release(struct net_device *dev)
+{
+  return 0;
+}
 
-static int vnet_xmit(struct sk_buff *skb, struct net_device *dev){}
+static int vnet_xmit(struct sk_buff *skb, struct net_device *dev)
+{
+  return 0;
+}
 
-static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd){}
+static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
+{
+  return 0;
+}
 
 static const struct net_device_ops vnet_netdev_ops = {
   .ndo_open = vnet_open,
@@ -21,7 +35,6 @@ static const struct net_device_ops vnet_netdev_ops = {
 /* Приватные данные устройства */
 struct vnet_priv {
   spinlock_t lock;
-  skb_queue_head_t rx_queue;
 };
 
 struct net_device *dev = NULL;
