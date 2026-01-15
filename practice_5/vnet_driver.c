@@ -35,6 +35,8 @@ static const struct net_device_ops vnet_netdev_ops = {
 /* Приватные данные устройства */
 struct vnet_priv {
   spinlock_t lock;
+  struct sk_buff_head rx_queue;
+  int lost_rx_packets;
 };
 
 struct net_device *dev = NULL;
@@ -73,4 +75,18 @@ static void vnet_setup(struct net_device *dev) {
     struct vnet_priv *priv = netdev_priv(dev);
     ether_setup(dev); // Настройка устройства как Ethernet
     dev->netdev_ops = &vnet_netdev_ops;
+
+    /* Initialize private data */
+    spin_lock_init(&priv->lock);
+    skb_queue_head_init(&priv->rx_queue);
+    priv->lost_rx_packets = 0;
+    // set MTU = 1400
+    dev->mtu = 1400;
+    // generate random MAC address using helper function
+    eth_hw_addr_random(dev);
+    // pr_info this MAC address
+    pr_info("VNET: MAC address: %pM\n", dev->dev_addr
+    // set device flags: Broadcast enabled, Multicast enabled, ARP enabled
+    dev->flags |= IFF_BROADCAST | IFF_MULTICAST | IFF_ARP;
+    
 }
