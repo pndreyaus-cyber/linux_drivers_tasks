@@ -4,20 +4,26 @@
 #include <linux/etherdevice.h>
 
 static void vnet_setup(struct net_device *dev);
+static int vnet_napi_poll(struct napi_struct *napi, int budget);
 
 /* Инициализация устройства */
 static int vnet_open(struct net_device *dev)
 {
-    napi_enable(&dev->napi);
+    struct vnet_priv *priv = netdev_priv(dev);
+    napi_enable(&priv->napi);
+    //start tx queue
+    netif_start_queue(dev);
+    
     pr_info("VNET: Device opened\n");
     return 0;
 }
 
 static int vnet_release(struct net_device *dev)
 {
-    napi_disable(&dev->napi);
-    // clear rx_queue
+    // stop tx queue
+    netif_stop_queue(dev);
     struct vnet_priv *priv = netdev_priv(dev);
+    napi_disable(&priv->napi);
     skb_queue_purge(&priv->rx_queue);
     pr_info("VNET: Device released\n");
     return 0;
@@ -44,7 +50,7 @@ struct vnet_priv {
   spinlock_t lock;
   struct sk_buff_head rx_queue;
   int lost_rx_packets;
-  napi_struct napi;
+  struct napi_struct napi;
 };
 
 struct net_device *dev = NULL;
@@ -97,5 +103,10 @@ static void vnet_setup(struct net_device *dev) {
     // set device flags: Broadcast enabled, Multicast enabled, ARP enabled
     dev->flags |= IFF_BROADCAST | IFF_MULTICAST;
 
-    netif_napi_add(dev, &priv->napi, NULL, 64);
+    netif_napi_add(dev, &priv->napi, vnet_napi_poll, 64);
+}
+
+// napi poll function
+static int vnet_napi_poll(struct napi_struct *napi, int budget) {
+    return 0;
 }
