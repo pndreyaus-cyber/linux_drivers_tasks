@@ -1,0 +1,63 @@
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/netdevice.h>
+#include <linux/etherdevice.h>
+
+/* Инициализация устройства */
+static int vnet_open(struct net_device *dev){}
+
+static int vnet_release(struct net_device *dev){}
+
+static int vnet_xmit(struct sk_buff *skb, struct net_device *dev){}
+
+static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd){}
+
+static const struct net_device_ops vnet_netdev_ops = {
+  .ndo_open = vnet_open,
+  .ndo_stop = vnet_release,
+  .ndo_start_xmit = vnet_xmit,
+  .ndo_do_ioctl = vnet_ioctl,
+};
+/* Приватные данные устройства */
+struct vnet_priv {
+  spinlock_t lock;
+  skb_queue_head_t rx_queue;
+};
+
+struct net_device *dev = NULL;
+/* Инициализация структуры устройства */
+static int __init vnet_init(void) {
+  pr_info("VNET init module...\n");
+  dev = alloc_netdev(sizeof(struct vnet_priv),
+                     "vnet%d",
+                     NET_NAME_UNKNOWN,
+                     vnet_setup);
+  if (register_netdev(dev)) {
+    pr_info("VNET: device init error\n");
+    return 1;
+  }
+  
+  return 0;
+}
+
+/* Выход модуля - Очистка всего */
+static void __exit vnet_exit(void) {
+  /* Удаление устройства и освобождение ресурсов в обратном порядке*/
+  unregister_netdev(dev);
+  free_netdev(dev);
+  pr_info("VNET exit module... Goodbye!\n");
+}
+
+module_init(vnet_init);
+module_exit(vnet_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Andrei Petrov");
+MODULE_DESCRIPTION("Virtual Ethernet Driver with packet processing + NAPI");
+
+
+static void vnet_setup(struct net_device *dev) {
+    struct vnet_priv *priv = netdev_priv(dev);
+    ether_setup(dev); // Настройка устройства как Ethernet
+    dev->netdev_ops = &vnet_netdev_ops;
+}
