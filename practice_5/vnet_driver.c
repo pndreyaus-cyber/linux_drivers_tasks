@@ -8,7 +8,6 @@ static int vnet_napi_poll(struct napi_struct *napi, int budget);
 static int vnet_open(struct net_device *dev);
 static int vnet_release(struct net_device *dev);
 static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev);
-static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd);
 
 /* Network device operations */
 static const struct net_device_ops vnet_netdev_ops = {
@@ -167,8 +166,8 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
     pr_info("VNET: vnet_xmit");
 
     // Update TX statistics
-    netdev->stats.tx_packets++;
-    netdev->stats.tx_bytes += skb->len;
+    dev->stats.tx_packets++;
+    dev->stats.tx_bytes += skb->len;
 
     // Lock rx queue. Why? Because we will access shared resource rx_queue. But rx_queue contains received packets, why do we need to lock it when we are transmitting? Because in this virtual driver, we simulate packet transmission by enqueueing the skb into the RX queue for processing by NAPI.
     spin_lock(&priv->lock);
