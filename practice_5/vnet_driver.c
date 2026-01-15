@@ -21,9 +21,6 @@ static const struct net_device_ops vnet_netdev_ops = {
 struct vnet_priv {
     spinlock_t lock;
     struct sk_buff_head rx_queue;
-    int lost_rx_packets;
-    int tx_packets;
-    int rx_packets;
     struct napi_struct napi;
 };
 
@@ -141,12 +138,11 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
     pr_info("VNET: vnet_xmit");
     struct vnet_priv *priv = netdev_priv(dev);
 
-    //dev->stats.tx_packets++;
-    //dev->stats.tx_bytes += skb->len;
+    dev->stats.tx_packets++;
+    dev->stats.tx_bytes += skb->len;
 
     // Lock rx queue
     spin_lock(&priv->lock);
-    
     if (skb_queue_len(&priv->rx_queue) >= 5) {
         pr_info("VNET: RX queue full, dropping packet\n");
         spin_unlock(&priv->lock);
@@ -155,18 +151,19 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
         priv->lost_rx_packets++;
         kfree_skb(skb);
         return NETDEV_TX_BUSY;
-    }
-    pr_info("VNET: Packet queued in RX queue\n");
-    // enqueue skb to rx_queue
+    } else{
+        pr_info("VNET: Packet queued in RX queue\n");
+        // enqueue skb to rx_queue
+        __skb_queue_tail(&priv->rx_queue, skb);
+        if (skb_queue_len(&priv->rx_queue) >= 5) {
+            pr_info("VNET: rx_queue full!");
+        }
     
-    skb_queue_tail(&priv->rx_queue, skb);
-    if (skb_queue_len(&priv->rx_queue) >= 5) {
-        pr_info("VNET: rx_queue full!");
+        spin_unlock(&priv->lock);
+        napi_schedule(&priv->napi);
+        return NETDEV_TX_OK;
     }
     spin_unlock(&priv->lock);
-    napi_schedule(&priv->napi);
-    
-    return NETDEV_TX_OK;
 }
 
 static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
