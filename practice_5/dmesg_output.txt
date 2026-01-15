@@ -1,0 +1,565 @@
+ 3210.957130] VNET init module...
+[ 3210.957272] VNET: vnet_setup
+[ 3210.957274] VNET: MAC address: 7a:6e:71:37:88:10
+[ 3211.017128] VNET: vnet_open
+[ 3211.017132] VNET: Device opened
+[ 3211.068129] VNET: vnet_xmit
+[ 3211.068131] VNET: Packet queued in RX queue
+[ 3211.068133] VNET: vnet_napi_poll
+[ 3211.068134] VNET: Processing received packet 0 of length 328
+[ 3211.068135] VNET: Packet protocol: 0x0800
+[ 3211.068142] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3211.068143] VNET: RX queue empty after processing
+[ 3211.068144] VNET: NAPI poll complete, processed 1 packets
+[ 3211.083437] VNET: vnet_xmit
+[ 3211.083439] VNET: Packet queued in RX queue
+[ 3211.083441] VNET: vnet_napi_poll
+[ 3211.083442] VNET: Processing received packet 0 of length 90
+[ 3211.083443] VNET: Packet protocol: 0x86dd
+[ 3211.083450] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3211.083450] VNET: RX queue empty after processing
+[ 3211.083451] VNET: NAPI poll complete, processed 1 packets
+[ 3211.089417] VNET: vnet_xmit
+[ 3211.089419] VNET: Packet queued in RX queue
+[ 3211.089421] VNET: vnet_napi_poll
+[ 3211.089421] VNET: Processing received packet 0 of length 110
+[ 3211.089422] VNET: Packet protocol: 0x86dd
+[ 3211.089427] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3211.089427] VNET: RX queue empty after processing
+[ 3211.089428] VNET: NAPI poll complete, processed 1 packets
+[ 3211.287325] VNET: vnet_xmit
+[ 3211.287330] VNET: Packet queued in RX queue
+[ 3211.287333] VNET: vnet_napi_poll
+[ 3211.287334] VNET: Processing received packet 0 of length 90
+[ 3211.287337] VNET: Packet protocol: 0x86dd
+[ 3211.287348] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3211.287349] VNET: RX queue empty after processing
+[ 3211.287350] VNET: NAPI poll complete, processed 1 packets
+[ 3211.632460] VNET: vnet_xmit
+[ 3211.632466] VNET: Packet queued in RX queue
+[ 3211.632471] VNET: vnet_napi_poll
+[ 3211.632472] VNET: Processing received packet 0 of length 86
+[ 3211.632475] VNET: Packet protocol: 0x86dd
+[ 3211.632495] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3211.632496] VNET: RX queue empty after processing
+[ 3211.632498] VNET: NAPI poll complete, processed 1 packets
+[ 3212.671267] VNET: vnet_xmit
+[ 3212.671272] VNET: Packet queued in RX queue
+[ 3212.671278] VNET: vnet_napi_poll
+[ 3212.671279] VNET: Processing received packet 0 of length 110
+[ 3212.671283] VNET: Packet protocol: 0x86dd
+[ 3212.671296] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3212.671297] VNET: RX queue empty after processing
+[ 3212.671298] VNET: NAPI poll complete, processed 1 packets
+[ 3212.843797] VNET: vnet_xmit
+[ 3212.843801] VNET: Packet queued in RX queue
+[ 3212.843804] VNET: vnet_napi_poll
+[ 3212.843805] VNET: Processing received packet 0 of length 62
+[ 3212.843807] VNET: Packet protocol: 0x86dd
+[ 3212.843812] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3212.843813] VNET: RX queue empty after processing
+[ 3212.843814] VNET: NAPI poll complete, processed 1 packets
+[ 3213.064201] VNET: vnet_xmit
+[ 3213.064207] VNET: Packet queued in RX queue
+[ 3213.064212] VNET: vnet_napi_poll
+[ 3213.064214] VNET: Processing received packet 0 of length 110
+[ 3213.064217] VNET: Packet protocol: 0x86dd
+[ 3213.064230] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3213.064231] VNET: RX queue empty after processing
+[ 3213.064232] VNET: NAPI poll complete, processed 1 packets
+[ 3213.299999] VNET: vnet_xmit
+[ 3213.300004] VNET: Packet queued in RX queue
+[ 3213.300007] VNET: vnet_napi_poll
+[ 3213.300008] VNET: Processing received packet 0 of length 202
+[ 3213.300011] VNET: Packet protocol: 0x86dd
+[ 3213.300014] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3213.300015] VNET: RX queue empty after processing
+[ 3213.300016] VNET: NAPI poll complete, processed 1 packets
+[ 3213.942855] VNET: vnet_xmit
+[ 3213.942865] VNET: Packet queued in RX queue
+[ 3213.942874] VNET: vnet_napi_poll
+[ 3213.942876] VNET: Processing received packet 0 of length 328
+[ 3213.942882] VNET: Packet protocol: 0x0800
+[ 3213.942914] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3213.942916] VNET: RX queue empty after processing
+[ 3213.942919] VNET: NAPI poll complete, processed 1 packets
+[ 3214.355042] VNET: vnet_xmit
+[ 3214.355054] VNET: Packet queued in RX queue
+[ 3214.355062] VNET: vnet_napi_poll
+[ 3214.355064] VNET: Processing received packet 0 of length 107
+[ 3214.355070] VNET: Packet protocol: 0x86dd
+[ 3214.355080] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3214.355082] VNET: RX queue empty after processing
+[ 3214.355085] VNET: NAPI poll complete, processed 1 packets
+[ 3215.493938] VNET: vnet_xmit
+[ 3215.493941] VNET: Packet queued in RX queue
+[ 3215.493944] VNET: vnet_napi_poll
+[ 3215.493945] VNET: Processing received packet 0 of length 202
+[ 3215.493948] VNET: Packet protocol: 0x86dd
+[ 3215.493951] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3215.493952] VNET: RX queue empty after processing
+[ 3215.493953] VNET: NAPI poll complete, processed 1 packets
+[ 3216.574419] VNET: vnet_xmit
+[ 3216.574426] VNET: Packet queued in RX queue
+[ 3216.574432] VNET: vnet_napi_poll
+[ 3216.574433] VNET: Processing received packet 0 of length 62
+[ 3216.574437] VNET: Packet protocol: 0x86dd
+[ 3216.574448] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3216.574451] VNET: RX queue empty after processing
+[ 3216.574452] VNET: NAPI poll complete, processed 1 packets
+[ 3218.406866] VNET: vnet_xmit
+[ 3218.406878] VNET: Packet queued in RX queue
+[ 3218.406885] VNET: vnet_napi_poll
+[ 3218.406886] VNET: Processing received packet 0 of length 107
+[ 3218.406892] VNET: Packet protocol: 0x86dd
+[ 3218.406899] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3218.406901] VNET: RX queue empty after processing
+[ 3218.406903] VNET: NAPI poll complete, processed 1 packets
+[ 3218.921779] VNET: vnet_xmit
+[ 3218.921782] VNET: Packet queued in RX queue
+[ 3218.921786] VNET: vnet_napi_poll
+[ 3218.921786] VNET: Processing received packet 0 of length 328
+[ 3218.921788] VNET: Packet protocol: 0x0800
+[ 3218.921799] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3218.921800] VNET: RX queue empty after processing
+[ 3218.921801] VNET: NAPI poll complete, processed 1 packets
+[ 3223.897479] VNET: vnet_xmit
+[ 3223.897484] VNET: Packet queued in RX queue
+[ 3223.897488] VNET: vnet_napi_poll
+[ 3223.897490] VNET: Processing received packet 0 of length 62
+[ 3223.897493] VNET: Packet protocol: 0x86dd
+[ 3223.897501] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3223.897502] VNET: RX queue empty after processing
+[ 3223.897504] VNET: NAPI poll complete, processed 1 packets
+[ 3226.676953] VNET: vnet_xmit
+[ 3226.676961] VNET: Packet queued in RX queue
+[ 3226.676967] VNET: vnet_napi_poll
+[ 3226.676968] VNET: Processing received packet 0 of length 107
+[ 3226.676973] VNET: Packet protocol: 0x86dd
+[ 3226.676979] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3226.676981] VNET: RX queue empty after processing
+[ 3226.676983] VNET: NAPI poll complete, processed 1 packets
+[ 3227.728703] VNET: vnet_xmit
+[ 3227.728706] VNET: Packet queued in RX queue
+[ 3227.728709] VNET: vnet_napi_poll
+[ 3227.728709] VNET: Processing received packet 0 of length 328
+[ 3227.728711] VNET: Packet protocol: 0x0800
+[ 3227.728719] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3227.728720] VNET: RX queue empty after processing
+[ 3227.728721] VNET: NAPI poll complete, processed 1 packets
+[ 3239.480408] VNET: vnet_xmit
+[ 3239.480415] VNET: Packet queued in RX queue
+[ 3239.480420] VNET: vnet_napi_poll
+[ 3239.480421] VNET: Processing received packet 0 of length 62
+[ 3239.480426] VNET: Packet protocol: 0x86dd
+[ 3239.480437] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3239.480438] VNET: RX queue empty after processing
+[ 3239.480440] VNET: NAPI poll complete, processed 1 packets
+[ 3243.239644] VNET: vnet_xmit
+[ 3243.239655] VNET: Packet queued in RX queue
+[ 3243.239662] VNET: vnet_napi_poll
+[ 3243.239663] VNET: Processing received packet 0 of length 107
+[ 3243.239670] VNET: Packet protocol: 0x86dd
+[ 3243.239678] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3243.239680] VNET: RX queue empty after processing
+[ 3243.239683] VNET: NAPI poll complete, processed 1 packets
+[ 3244.637887] VNET: vnet_xmit
+[ 3244.637896] VNET: Packet queued in RX queue
+[ 3244.637904] VNET: vnet_napi_poll
+[ 3244.637905] VNET: Processing received packet 0 of length 328
+[ 3244.637910] VNET: Packet protocol: 0x0800
+[ 3244.637934] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3244.637936] VNET: RX queue empty after processing
+[ 3244.637939] VNET: NAPI poll complete, processed 1 packets
+[ 3254.374363] VNET: vnet_xmit
+[ 3254.374366] VNET: Packet queued in RX queue
+[ 3254.374389] VNET: vnet_napi_poll
+[ 3254.374390] VNET: Processing received packet 0 of length 54
+[ 3254.374392] VNET: Packet protocol: 0x0800
+[ 3254.374399] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3254.374399] VNET: RX queue empty after processing
+[ 3254.374400] VNET: NAPI poll complete, processed 1 packets
+[ 3254.495799] VNET: vnet_xmit
+[ 3254.495809] VNET: Packet queued in RX queue
+[ 3254.495816] VNET: vnet_napi_poll
+[ 3254.495817] VNET: Processing received packet 0 of length 87
+[ 3254.495824] VNET: Packet protocol: 0x0800
+[ 3254.495837] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3254.495839] VNET: RX queue empty after processing
+[ 3254.495841] VNET: NAPI poll complete, processed 1 packets
+[ 3254.594151] VNET: vnet_xmit
+[ 3254.594159] VNET: Packet queued in RX queue
+[ 3254.594164] VNET: vnet_napi_poll
+[ 3254.594166] VNET: Processing received packet 0 of length 252
+[ 3254.594170] VNET: Packet protocol: 0x0800
+[ 3254.594181] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3254.594182] VNET: RX queue empty after processing
+[ 3254.594184] VNET: NAPI poll complete, processed 1 packets
+[ 3254.634239] VNET: vnet_xmit
+[ 3254.634248] VNET: Packet queued in RX queue
+[ 3254.634283] VNET: vnet_napi_poll
+[ 3254.634285] VNET: Processing received packet 0 of length 54
+[ 3254.634291] VNET: Packet protocol: 0x0800
+[ 3254.634311] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3254.634314] VNET: RX queue empty after processing
+[ 3254.634318] VNET: NAPI poll complete, processed 1 packets
+[ 3254.927665] VNET: vnet_xmit
+[ 3254.927670] VNET: Packet queued in RX queue
+[ 3254.927674] VNET: vnet_napi_poll
+[ 3254.927675] VNET: Processing received packet 0 of length 252
+[ 3254.927677] VNET: Packet protocol: 0x0800
+[ 3254.927684] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3254.927685] VNET: RX queue empty after processing
+[ 3254.927686] VNET: NAPI poll complete, processed 1 packets
+[ 3255.450562] VNET: vnet_xmit
+[ 3255.450566] VNET: Packet queued in RX queue
+[ 3255.450568] VNET: vnet_napi_poll
+[ 3255.450568] VNET: Processing received packet 0 of length 234
+[ 3255.450570] VNET: Packet protocol: 0x0800
+[ 3255.450575] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3255.450575] VNET: RX queue empty after processing
+[ 3255.450576] VNET: NAPI poll complete, processed 1 packets
+[ 3255.551213] VNET: vnet_xmit
+[ 3255.551217] VNET: Packet queued in RX queue
+[ 3255.551220] VNET: vnet_napi_poll
+[ 3255.551221] VNET: Processing received packet 0 of length 87
+[ 3255.551223] VNET: Packet protocol: 0x0800
+[ 3255.551228] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3255.551229] VNET: RX queue empty after processing
+[ 3255.551230] VNET: NAPI poll complete, processed 1 packets
+[ 3256.011701] VNET: vnet_xmit
+[ 3256.011704] VNET: Packet queued in RX queue
+[ 3256.011707] VNET: vnet_napi_poll
+[ 3256.011708] VNET: Processing received packet 0 of length 182
+[ 3256.011709] VNET: Packet protocol: 0x0800
+[ 3256.011712] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.011713] VNET: RX queue empty after processing
+[ 3256.011714] VNET: NAPI poll complete, processed 1 packets
+[ 3256.014617] VNET: vnet_xmit
+[ 3256.014619] VNET: Packet queued in RX queue
+[ 3256.014860] VNET: vnet_napi_poll
+[ 3256.014860] VNET: Processing received packet 0 of length 110
+[ 3256.014861] VNET: Packet protocol: 0x86dd
+[ 3256.014869] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.014869] VNET: RX queue empty after processing
+[ 3256.014870] VNET: NAPI poll complete, processed 1 packets
+[ 3256.035789] VNET: vnet_xmit
+[ 3256.035792] VNET: Packet queued in RX queue
+[ 3256.035794] VNET: vnet_napi_poll
+[ 3256.035794] VNET: Processing received packet 0 of length 328
+[ 3256.035795] VNET: Packet protocol: 0x0800
+[ 3256.035801] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.035802] VNET: RX queue empty after processing
+[ 3256.035802] VNET: NAPI poll complete, processed 1 packets
+[ 3256.036940] VNET: vnet_xmit
+[ 3256.036942] VNET: Packet queued in RX queue
+[ 3256.036946] VNET: vnet_napi_poll
+[ 3256.036946] VNET: Processing received packet 0 of length 54
+[ 3256.036948] VNET: Packet protocol: 0x0800
+[ 3256.036951] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.036951] VNET: RX queue empty after processing
+[ 3256.036952] VNET: NAPI poll complete, processed 1 packets
+[ 3256.039106] VNET: vnet_xmit
+[ 3256.039107] VNET: Packet queued in RX queue
+[ 3256.039109] VNET: vnet_napi_poll
+[ 3256.039109] VNET: Processing received packet 0 of length 110
+[ 3256.039111] VNET: Packet protocol: 0x86dd
+[ 3256.039117] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.039117] VNET: RX queue empty after processing
+[ 3256.039118] VNET: NAPI poll complete, processed 1 packets
+[ 3256.041931] VNET: vnet_xmit
+[ 3256.041933] VNET: Packet queued in RX queue
+[ 3256.041934] VNET: vnet_napi_poll
+[ 3256.041935] VNET: Processing received packet 0 of length 110
+[ 3256.041936] VNET: Packet protocol: 0x86dd
+[ 3256.041940] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.041941] VNET: RX queue empty after processing
+[ 3256.041942] VNET: NAPI poll complete, processed 1 packets
+[ 3256.502837] VNET: vnet_xmit
+[ 3256.502841] VNET: Packet queued in RX queue
+[ 3256.502885] VNET: vnet_napi_poll
+[ 3256.502886] VNET: Processing received packet 0 of length 54
+[ 3256.502888] VNET: Packet protocol: 0x0800
+[ 3256.502896] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.502897] VNET: RX queue empty after processing
+[ 3256.502898] VNET: NAPI poll complete, processed 1 packets
+[ 3256.835449] VNET: vnet_xmit
+[ 3256.835457] VNET: Packet queued in RX queue
+[ 3256.835464] VNET: vnet_napi_poll
+[ 3256.835465] VNET: Processing received packet 0 of length 86
+[ 3256.835469] VNET: Packet protocol: 0x86dd
+[ 3256.835494] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3256.835496] VNET: RX queue empty after processing
+[ 3256.835497] VNET: NAPI poll complete, processed 1 packets
+[ 3257.856507] VNET: vnet_xmit
+[ 3257.856516] VNET: Packet queued in RX queue
+[ 3257.856523] VNET: vnet_napi_poll
+[ 3257.856525] VNET: Processing received packet 0 of length 110
+[ 3257.856531] VNET: Packet protocol: 0x86dd
+[ 3257.856548] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3257.856550] VNET: RX queue empty after processing
+[ 3257.856552] VNET: NAPI poll complete, processed 1 packets
+[ 3257.896284] VNET: vnet_xmit
+[ 3257.896294] VNET: Packet queued in RX queue
+[ 3257.896303] VNET: vnet_napi_poll
+[ 3257.896305] VNET: Processing received packet 0 of length 62
+[ 3257.896311] VNET: Packet protocol: 0x86dd
+[ 3257.896326] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3257.896328] VNET: RX queue empty after processing
+[ 3257.896331] VNET: NAPI poll complete, processed 1 packets
+[ 3258.075974] VNET: vnet_xmit
+[ 3258.075979] VNET: Packet queued in RX queue
+[ 3258.075984] VNET: vnet_napi_poll
+[ 3258.075985] VNET: Processing received packet 0 of length 202
+[ 3258.075988] VNET: Packet protocol: 0x86dd
+[ 3258.075993] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3258.075994] VNET: RX queue empty after processing
+[ 3258.075996] VNET: NAPI poll complete, processed 1 packets
+[ 3258.364615] VNET: vnet_xmit
+[ 3258.364622] VNET: Packet queued in RX queue
+[ 3258.364628] VNET: vnet_napi_poll
+[ 3258.364630] VNET: Processing received packet 0 of length 328
+[ 3258.364634] VNET: Packet protocol: 0x0800
+[ 3258.364661] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3258.364662] VNET: RX queue empty after processing
+[ 3258.364664] VNET: NAPI poll complete, processed 1 packets
+[ 3258.486991] VNET: vnet_xmit
+[ 3258.487004] VNET: Packet queued in RX queue
+[ 3258.487013] VNET: vnet_napi_poll
+[ 3258.487015] VNET: Processing received packet 0 of length 110
+[ 3258.487021] VNET: Packet protocol: 0x86dd
+[ 3258.487053] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3258.487055] VNET: RX queue empty after processing
+[ 3258.487058] VNET: NAPI poll complete, processed 1 packets
+[ 3259.182667] VNET: vnet_xmit
+[ 3259.182670] VNET: Packet queued in RX queue
+[ 3259.182672] VNET: vnet_napi_poll
+[ 3259.182673] VNET: Processing received packet 0 of length 107
+[ 3259.182674] VNET: Packet protocol: 0x86dd
+[ 3259.182676] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3259.182677] VNET: RX queue empty after processing
+[ 3259.182678] VNET: NAPI poll complete, processed 1 packets
+[ 3260.152089] VNET: vnet_xmit
+[ 3260.152096] VNET: Packet queued in RX queue
+[ 3260.152102] VNET: vnet_napi_poll
+[ 3260.152103] VNET: Processing received packet 0 of length 202
+[ 3260.152108] VNET: Packet protocol: 0x86dd
+[ 3260.152114] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3260.152116] VNET: RX queue empty after processing
+[ 3260.152118] VNET: NAPI poll complete, processed 1 packets
+[ 3262.293383] VNET: vnet_xmit
+[ 3262.293388] VNET: Packet queued in RX queue
+[ 3262.293393] VNET: vnet_napi_poll
+[ 3262.293394] VNET: Processing received packet 0 of length 62
+[ 3262.293398] VNET: Packet protocol: 0x86dd
+[ 3262.293406] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3262.293408] VNET: RX queue empty after processing
+[ 3262.293409] VNET: NAPI poll complete, processed 1 packets
+[ 3262.464144] VNET: vnet_xmit
+[ 3262.464155] VNET: Packet queued in RX queue
+[ 3262.464164] VNET: vnet_napi_poll
+[ 3262.464166] VNET: Processing received packet 0 of length 328
+[ 3262.464172] VNET: Packet protocol: 0x0800
+[ 3262.464205] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3262.464208] VNET: RX queue empty after processing
+[ 3262.464210] VNET: NAPI poll complete, processed 1 packets
+[ 3263.377715] VNET: vnet_xmit
+[ 3263.377723] VNET: Packet queued in RX queue
+[ 3263.377729] VNET: vnet_napi_poll
+[ 3263.377731] VNET: Processing received packet 0 of length 107
+[ 3263.377736] VNET: Packet protocol: 0x86dd
+[ 3263.377743] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3263.377745] VNET: RX queue empty after processing
+[ 3263.377747] VNET: NAPI poll complete, processed 1 packets
+[ 3271.993599] VNET: vnet_xmit
+[ 3271.993605] VNET: Packet queued in RX queue
+[ 3271.993609] VNET: vnet_napi_poll
+[ 3271.993610] VNET: Processing received packet 0 of length 62
+[ 3271.993613] VNET: Packet protocol: 0x86dd
+[ 3271.993620] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3271.993622] VNET: RX queue empty after processing
+[ 3271.993623] VNET: NAPI poll complete, processed 1 packets
+[ 3272.452101] VNET: vnet_xmit
+[ 3272.452110] VNET: Packet queued in RX queue
+[ 3272.452118] VNET: vnet_napi_poll
+[ 3272.452119] VNET: Processing received packet 0 of length 328
+[ 3272.452124] VNET: Packet protocol: 0x0800
+[ 3272.452154] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3272.452156] VNET: RX queue empty after processing
+[ 3272.452158] VNET: NAPI poll complete, processed 1 packets
+[ 3273.070624] VNET: vnet_xmit
+[ 3273.070632] VNET: Packet queued in RX queue
+[ 3273.070637] VNET: vnet_napi_poll
+[ 3273.070638] VNET: Processing received packet 0 of length 107
+[ 3273.070642] VNET: Packet protocol: 0x86dd
+[ 3273.070648] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3273.070649] VNET: RX queue empty after processing
+[ 3273.070651] VNET: NAPI poll complete, processed 1 packets
+[ 3289.388055] VNET: vnet_xmit
+[ 3289.388061] VNET: Packet queued in RX queue
+[ 3289.388066] VNET: vnet_napi_poll
+[ 3289.388067] VNET: Processing received packet 0 of length 107
+[ 3289.388071] VNET: Packet protocol: 0x86dd
+[ 3289.388076] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3289.388078] VNET: RX queue empty after processing
+[ 3289.388079] VNET: NAPI poll complete, processed 1 packets
+[ 3289.394548] VNET: vnet_xmit
+[ 3289.394552] VNET: Packet queued in RX queue
+[ 3289.394556] VNET: vnet_napi_poll
+[ 3289.394557] VNET: Processing received packet 0 of length 328
+[ 3289.394560] VNET: Packet protocol: 0x0800
+[ 3289.394574] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3289.394576] VNET: RX queue empty after processing
+[ 3289.394577] VNET: NAPI poll complete, processed 1 packets
+[ 3290.750423] VNET: vnet_xmit
+[ 3290.750427] VNET: Packet queued in RX queue
+[ 3290.750430] VNET: vnet_napi_poll
+[ 3290.750430] VNET: Processing received packet 0 of length 62
+[ 3290.750432] VNET: Packet protocol: 0x86dd
+[ 3290.750436] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3290.750437] VNET: RX queue empty after processing
+[ 3290.750438] VNET: NAPI poll complete, processed 1 packets
+[ 3301.508487] VNET: vnet_xmit
+[ 3301.508490] VNET: Packet queued in RX queue
+[ 3301.508493] VNET: vnet_napi_poll
+[ 3301.508494] VNET: Processing received packet 0 of length 110
+[ 3301.508496] VNET: Packet protocol: 0x86dd
+[ 3301.508504] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3301.508505] VNET: RX queue empty after processing
+[ 3301.508506] VNET: NAPI poll complete, processed 1 packets
+[ 3301.526595] VNET: vnet_xmit
+[ 3301.526598] VNET: Packet queued in RX queue
+[ 3301.526600] VNET: vnet_napi_poll
+[ 3301.526600] VNET: Processing received packet 0 of length 328
+[ 3301.526601] VNET: Packet protocol: 0x0800
+[ 3301.526607] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3301.526608] VNET: RX queue empty after processing
+[ 3301.526609] VNET: NAPI poll complete, processed 1 packets
+[ 3301.529878] VNET: vnet_xmit
+[ 3301.529879] VNET: Packet queued in RX queue
+[ 3301.529880] VNET: vnet_napi_poll
+[ 3301.529881] VNET: Processing received packet 0 of length 110
+[ 3301.529882] VNET: Packet protocol: 0x86dd
+[ 3301.529887] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3301.529888] VNET: RX queue empty after processing
+[ 3301.529888] VNET: NAPI poll complete, processed 1 packets
+[ 3301.893742] VNET: vnet_xmit
+[ 3301.893753] VNET: Packet queued in RX queue
+[ 3301.893763] VNET: vnet_napi_poll
+[ 3301.893765] VNET: Processing received packet 0 of length 110
+[ 3301.893772] VNET: Packet protocol: 0x86dd
+[ 3301.893803] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3301.893805] VNET: RX queue empty after processing
+[ 3301.893808] VNET: NAPI poll complete, processed 1 packets
+[ 3302.078697] VNET: vnet_xmit
+[ 3302.078707] VNET: Packet queued in RX queue
+[ 3302.078716] VNET: vnet_napi_poll
+[ 3302.078718] VNET: Processing received packet 0 of length 86
+[ 3302.078724] VNET: Packet protocol: 0x86dd
+[ 3302.078759] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3302.078762] VNET: RX queue empty after processing
+[ 3302.078764] VNET: NAPI poll complete, processed 1 packets
+[ 3303.105798] VNET: vnet_xmit
+[ 3303.105805] VNET: Packet queued in RX queue
+[ 3303.105812] VNET: vnet_napi_poll
+[ 3303.105813] VNET: Processing received packet 0 of length 110
+[ 3303.105818] VNET: Packet protocol: 0x86dd
+[ 3303.105834] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3303.105836] VNET: RX queue empty after processing
+[ 3303.105838] VNET: NAPI poll complete, processed 1 packets
+[ 3303.162644] VNET: vnet_xmit
+[ 3303.162654] VNET: Packet queued in RX queue
+[ 3303.162663] VNET: vnet_napi_poll
+[ 3303.162665] VNET: Processing received packet 0 of length 62
+[ 3303.162672] VNET: Packet protocol: 0x86dd
+[ 3303.162686] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3303.162689] VNET: RX queue empty after processing
+[ 3303.162691] VNET: NAPI poll complete, processed 1 packets
+[ 3303.562678] VNET: vnet_xmit
+[ 3303.562690] VNET: Packet queued in RX queue
+[ 3303.562699] VNET: vnet_napi_poll
+[ 3303.562701] VNET: Processing received packet 0 of length 110
+[ 3303.562708] VNET: Packet protocol: 0x86dd
+[ 3303.562738] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3303.562741] VNET: RX queue empty after processing
+[ 3303.562744] VNET: NAPI poll complete, processed 1 packets
+[ 3304.347953] VNET: vnet_xmit
+[ 3304.347963] VNET: Packet queued in RX queue
+[ 3304.347970] VNET: vnet_napi_poll
+[ 3304.347971] VNET: Processing received packet 0 of length 202
+[ 3304.347977] VNET: Packet protocol: 0x86dd
+[ 3304.347984] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3304.347986] VNET: RX queue empty after processing
+[ 3304.347989] VNET: NAPI poll complete, processed 1 packets
+[ 3304.618258] VNET: vnet_xmit
+[ 3304.618270] VNET: Packet queued in RX queue
+[ 3304.618280] VNET: vnet_napi_poll
+[ 3304.618282] VNET: Processing received packet 0 of length 328
+[ 3304.618288] VNET: Packet protocol: 0x0800
+[ 3304.618323] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3304.618325] VNET: RX queue empty after processing
+[ 3304.618327] VNET: NAPI poll complete, processed 1 packets
+[ 3305.385148] VNET: vnet_xmit
+[ 3305.385155] VNET: Packet queued in RX queue
+[ 3305.385159] VNET: vnet_napi_poll
+[ 3305.385161] VNET: Processing received packet 0 of length 107
+[ 3305.385164] VNET: Packet protocol: 0x86dd
+[ 3305.385170] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3305.385171] VNET: RX queue empty after processing
+[ 3305.385173] VNET: NAPI poll complete, processed 1 packets
+[ 3306.548282] VNET: vnet_xmit
+[ 3306.548286] VNET: Packet queued in RX queue
+[ 3306.548289] VNET: vnet_napi_poll
+[ 3306.548290] VNET: Processing received packet 0 of length 202
+[ 3306.548293] VNET: Packet protocol: 0x86dd
+[ 3306.548296] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3306.548297] VNET: RX queue empty after processing
+[ 3306.548298] VNET: NAPI poll complete, processed 1 packets
+[ 3307.455881] VNET: vnet_xmit
+[ 3307.455890] VNET: Packet queued in RX queue
+[ 3307.455897] VNET: vnet_napi_poll
+[ 3307.455899] VNET: Processing received packet 0 of length 62
+[ 3307.455903] VNET: Packet protocol: 0x86dd
+[ 3307.455915] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3307.455917] VNET: RX queue empty after processing
+[ 3307.455919] VNET: NAPI poll complete, processed 1 packets
+[ 3309.167321] VNET: vnet_xmit
+[ 3309.167329] VNET: Packet queued in RX queue
+[ 3309.167337] VNET: vnet_napi_poll
+[ 3309.167339] VNET: Processing received packet 0 of length 328
+[ 3309.167345] VNET: Packet protocol: 0x0800
+[ 3309.167372] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3309.167373] VNET: RX queue empty after processing
+[ 3309.167376] VNET: NAPI poll complete, processed 1 packets
+[ 3309.298193] VNET: vnet_xmit
+[ 3309.298202] VNET: Packet queued in RX queue
+[ 3309.298208] VNET: vnet_napi_poll
+[ 3309.298210] VNET: Processing received packet 0 of length 107
+[ 3309.298215] VNET: Packet protocol: 0x86dd
+[ 3309.298222] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3309.298223] VNET: RX queue empty after processing
+[ 3309.298226] VNET: NAPI poll complete, processed 1 packets
+[ 3315.877115] VNET: vnet_xmit
+[ 3315.877127] VNET: Packet queued in RX queue
+[ 3315.877137] VNET: vnet_napi_poll
+[ 3315.877139] VNET: Processing received packet 0 of length 62
+[ 3315.877145] VNET: Packet protocol: 0x86dd
+[ 3315.877164] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3315.877166] VNET: RX queue empty after processing
+[ 3315.877169] VNET: NAPI poll complete, processed 1 packets
+[ 3317.600214] VNET: vnet_xmit
+[ 3317.600218] VNET: Packet queued in RX queue
+[ 3317.600220] VNET: vnet_napi_poll
+[ 3317.600221] VNET: Processing received packet 0 of length 107
+[ 3317.600223] VNET: Packet protocol: 0x86dd
+[ 3317.600225] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3317.600226] VNET: RX queue empty after processing
+[ 3317.600227] VNET: NAPI poll complete, processed 1 packets
+[ 3318.118892] VNET: vnet_xmit
+[ 3318.118896] VNET: Packet queued in RX queue
+[ 3318.118899] VNET: vnet_napi_poll
+[ 3318.118899] VNET: Processing received packet 0 of length 328
+[ 3318.118901] VNET: Packet protocol: 0x0800
+[ 3318.118912] VNET: netif_wake_queue() called from vnet_napi_poll
+[ 3318.118913] VNET: RX queue empty after processing
+[ 3318.118914] VNET: NAPI poll complete, processed 1 packets
