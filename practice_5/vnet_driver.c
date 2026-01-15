@@ -7,7 +7,7 @@ static void vnet_setup(struct net_device *dev);
 static int vnet_napi_poll(struct napi_struct *napi, int budget);
 static int vnet_open(struct net_device *dev);
 static int vnet_release(struct net_device *dev);
-static int vnet_xmit(struct sk_buff *skb, struct net_device *dev);
+static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev);
 static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd);
 
 
@@ -60,6 +60,7 @@ MODULE_DESCRIPTION("Virtual Ethernet Driver with packet processing + NAPI");
 
 
 static void vnet_setup(struct net_device *dev) {
+    pr_info("VNET: vnet_setup");
     struct vnet_priv *priv = netdev_priv(dev);
     ether_setup(dev); // Настройка устройства как Ethernet
     dev->netdev_ops = &vnet_netdev_ops;
@@ -83,6 +84,7 @@ static void vnet_setup(struct net_device *dev) {
 
 // napi poll function
 static int vnet_napi_poll(struct napi_struct *napi, int budget) {
+    pr_info("VNET: vnet_napi_poll");
     struct net_device *netdev = napi->dev;  /* Get from NAPI context */
     struct vnet_priv *priv = netdev_priv(netdev);
     struct sk_buff *skb;
@@ -94,22 +96,24 @@ static int vnet_napi_poll(struct napi_struct *napi, int budget) {
         pr_info("VNET: Processing received packet of length %u\n", skb->len);
         /* Simulate packet reception */
         kfree_skb(skb);
-        done++;
+        work_done++;
         spin_lock(&priv->lock);
     }
     spin_unlock(&priv->lock);
 
     if (skb_queue_empty(&priv->rx_queue)) {
         napi_complete(napi);
+        pr_info("VNET: netif_wake_queue() called from vnet_napi_poll");
         netif_wake_queue(netdev);
     }
 
-    return done;
+    return work_done;
 }
 
 /* Инициализация устройства */
 static int vnet_open(struct net_device *dev)
 {
+    pr_info("VNET: vnet_open");
     struct vnet_priv *priv = netdev_priv(dev);
     napi_enable(&priv->napi);
     //start tx queue
@@ -121,7 +125,9 @@ static int vnet_open(struct net_device *dev)
 
 static int vnet_release(struct net_device *dev)
 {
+    pr_info("VNET: vnet_release");
     // stop tx queue
+    pr_info("VNET: netif_stop_queue() called from vnet_release()");
     netif_stop_queue(dev);
     struct vnet_priv *priv = netdev_priv(dev);
     napi_disable(&priv->napi);
@@ -132,6 +138,7 @@ static int vnet_release(struct net_device *dev)
 
 static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
 {
+    pr_info("VNET: vnet_xmit");
     struct vnet_priv *priv = netdev_priv(dev);
 
     //dev->stats.tx_packets++;
@@ -143,6 +150,7 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
     if (skb_queue_len(&priv->rx_queue) >= 5) {
         pr_info("VNET: RX queue full, dropping packet\n");
         spin_unlock(&priv->lock);
+        pr_info("VNET: netif_stop_queue() called from vnet_xmit()");
         netif_stop_queue(dev);
         priv->lost_rx_packets++;
         kfree_skb(skb);
@@ -152,6 +160,9 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
     // enqueue skb to rx_queue
     
     skb_queue_tail(&priv->rx_queue, skb);
+    if (skb_queue_len(&priv->rx_queue) >= 5) {
+        pr_info("VNET: rx_queue full!");
+    }
     spin_unlock(&priv->lock);
     napi_schedule(&priv->napi);
     
@@ -160,4 +171,5 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
 
 static int vnet_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 {
+  return 0;
 }
