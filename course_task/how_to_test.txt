@@ -1,0 +1,9 @@
+make
+
+sudo insmod mynetchar.ko
+sudo chmod 666 /dev/mynetchar
+gcc -o test_mynet test_mynet.c
+sudo ./test_mynet
+sudo dmesg | tail -20
+sudo rmmod mynetchar
+
