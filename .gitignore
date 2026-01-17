@@ -1,2 +1,11 @@
-.*
-!.gitignore
+# Compiled kernel driver #
+##########################
+*.o
+*.mod.o
+*.mod.c
+*.mod
+*.ko
+*.symvers
+*.order
+*.out
+
