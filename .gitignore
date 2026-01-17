@@ -17,4 +17,4 @@
 *.symvers
 *.order
 *.out
-
+*.cmd
