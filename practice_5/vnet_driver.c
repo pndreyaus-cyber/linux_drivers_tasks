@@ -181,6 +181,8 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
           Why? Because we cannot accept more packets for transmission until some are processed
           Do not we need to wake it up later? Yes, we wake it up in NAPI poll when we have space in RX queue
         */
+        dev -> stats.tx_dropped++;
+        
         kfree_skb(skb);
         return NETDEV_TX_BUSY; // Indicate that the transmission was not successful due to full RX queue
     } else{
