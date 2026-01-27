@@ -182,7 +182,11 @@ static netdev_tx_t vnet_xmit(struct sk_buff *skb, struct net_device *dev)
           Do not we need to wake it up later? Yes, we wake it up in NAPI poll when we have space in RX queue
         */
         dev -> stats.tx_dropped++;
+<<<<<<< HEAD:vnet_loopback_driver/src/vnet_driver.c
 
+=======
+        
+>>>>>>> 0ad3843715d764a1db36e2cf4604c0c52cd6ffe9:practice_5/vnet_driver.c
         kfree_skb(skb);
         return NETDEV_TX_BUSY; // Indicate that the transmission was not successful due to full RX queue
     } else{
