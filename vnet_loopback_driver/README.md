@@ -2,7 +2,7 @@
 
 ## What is the goal of the driver?
 This driver is used to feed transmitted packages back to rx networking kernel stack.
-This means, the driver receives packages for transmission from kernel, but it does not transmit to a real device, but rather eneques them in the local memory. Then the driver imitates receiven packages from the real device and send to the user space the enqueued packages (the same packages it received from the kernel)
+This means, the driver receives packages for transmission from kernel, but it does not transmit to a real device, but rather eneques them in the local memory. Then the driver imitates received packages from the real device and sends to the user space the enqueued packages (the same packages it received from the kernel)
 
 ## Packet movement in the driver
 On the image you can see, how package travels in the Linux. And also a diagram of the processes in the driver itself: NAPI, telling kernel, that the queue is full; restarting the acceptance of tx packages, because the queue became empty
