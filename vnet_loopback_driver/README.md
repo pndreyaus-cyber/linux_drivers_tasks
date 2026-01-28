@@ -12,6 +12,9 @@ On the image you can see, how package travels in the Linux. And also a diagram o
 ## Restrictions
 This driver is virtual and has no real hardware. Transmitted packets are stored in an internal RX queue and later injected into the kernel RX path via NAPI to simulate packet arrival from a network.
 
+## Network driver theory
+For a network driver to work you need the following things:
+* 
 
 ## How to build and run it?
 
